@@ -2,5 +2,4 @@
 config/passportConfig.js
 node_modules/**
 bower_components/**
-config/env/**
 

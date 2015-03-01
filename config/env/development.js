@@ -1,4 +1,4 @@
 module.exports = {
-   db: 'mongodb://********/meanjwtauth_dev',
+   db: 'mongodb://192.168.1.2/meanjwtauth_dev',
    privateKey: 'dev-private-key'
 };

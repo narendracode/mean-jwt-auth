@@ -14,8 +14,6 @@ exports.facebookLoginCallback = function(req,res,next){
 
 exports.localSignup =   function(req, res, next){    
     passport.authenticate('local-signup',function(err, user, info){
-        
-        //{type:false,data: 'error occured '+ err}
         if (err) { 
             return res.json({type:false,data: 'error occured '+ err}); 
         }

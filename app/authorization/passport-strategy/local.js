@@ -14,7 +14,7 @@ exports.signupStrategy = new LocalStrategy({
 		              return done(err);
 		        }
                 if (user) {
-                    return done(null, false, {'signupMessage': 'Email is already taken.'});
+                    return done(null, {type : false,data: 'Email is already taken.'});
                 } else {
                     var newUser  = new User();
                     newUser.role =  'user';
@@ -27,12 +27,9 @@ exports.signupStrategy = new LocalStrategy({
                                 data: 'error occured '+ err
                             });
                         }
-                        
-                        console.log("ROle of user signup : "+user.role);
                         var token = jwt.sign({email: user.local.email, role : user.role, token: user.token}, 'helloprivate', { algorithm: 'RS256'});
                         user.token = token;
                         user.save(function(err,user1){
-                           // return done(null, user1);
                             if(err){
                                 return done(null, { type : false,data: 'Error occured '+ err});
                             }
@@ -58,7 +55,7 @@ exports.loginStrategy = new LocalStrategy({
                     return done(null,{type:false,data: 'error occured '+ err});
                 }
                 if (!user) {
-                     return done(null, {type: false, 'data': "Account already exists with the email provided."});
+                     return done(null, {type: false, 'data': "Account doesn't exists with the email provided."});
                 } 
                 if(!user.validPassword(password)){
                     return done(null, {type: false, 'data': 'Password is wrong.'}); 

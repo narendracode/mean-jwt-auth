@@ -34,33 +34,28 @@ angular.module('authorization').controller('AuthController',['$scope','$resource
                 $scope.$broadcast('show-errors-check-validity'); 
                 if ($scope.singupForm.$valid){
                   AuthService.signup({email:$scope.email,password:$scope.password},function(result){
-          if(result['message']){
+                    if(!result['type']){
                             $scope.errorExists = true;
-                            $scope.loginErrorMessage = result['message'];
+                            $scope.loginErrorMessage = result['data'];
                         }else{
-          $location.path('/') 
-      }
-
-        });
-                }   
+                            $location.path('/') 
+                        }
+                });
+              }   
           }//signup
         
-           
          $scope.login = function(){
              $scope.$broadcast('show-errors-check-validity'); 
              if ($scope.loginForm.$valid){
-                 AuthService.login({
-                  'email':$scope.email,
-            'password':$scope.password
-           },function(result){
-                    if(result['message']){
-                        $scope.errorExists = true;
-                        $scope.loginErrorMessage = result['message'];
+                 AuthService.login({'email':$scope.email,'password':$scope.password},function(result){
+                     if(!result['type']){
+                         $scope.errorExists = true;
+                         $scope.loginErrorMessage = result['data'];
                     }else{
                         $location.path("/meetup/") 
                     }
                  });
-             }
+            }
         }//login
 
   $scope.logout = function(){

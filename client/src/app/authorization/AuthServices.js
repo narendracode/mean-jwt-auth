@@ -43,13 +43,6 @@ module.factory('AuthService',function($resource,$rootScope,$location,$cookieStor
 	loginResource.email = user.email;
 	loginResource.password = user.password;
 	loginResource.$save(function(result){
-	
-        /*if(!(!!result['message'])){
-            $localStorage.token = result.token;
-            $cookieStore.put('user',result);
-			$rootScope.currentUser = result;
-		}
-        */
         if(typeof result !== 'undefined'){
             if(result.type){
                 $localStorage.token = result.token;
@@ -74,11 +67,8 @@ module.factory('AuthService',function($resource,$rootScope,$location,$cookieStor
 	signupResource.email = user.email;
 	signupResource.password = user.password;
 	signupResource.$save(function(result){
-		/*if(!(!!result['message'])){
-			$rootScope.currentUser = result;
-            $localStorage.token = result.token;
-		}*/
         if(typeof result !== 'undefined'){
+            console.log("##### result of signup.. "+JSON.stringify(result));
             if(result.type){
                 $localStorage.token = result.token;
                 $cookieStore.put('user',result.data);

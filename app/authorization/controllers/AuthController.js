@@ -14,22 +14,23 @@ exports.facebookLoginCallback = function(req,res,next){
 
 exports.localSignup =   function(req, res, next){    
     passport.authenticate('local-signup',function(err, user, info){
+        
+        //{type:false,data: 'error occured '+ err}
         if (err) { 
-          return next(err); }
-        if(user){
-            return res.json(user);
+            return res.json({type:false,data: 'error occured '+ err}); 
         }
-        if(!user){ return res.json({'message':'Account already exists with the email.'}) }
+            return res.json(user);
     })(req, res, next);
 }
 
 exports.localLogin = function(req, res, next){
     passport.authenticate('local-login',function(err, user, info){
-        if (err) { return next(err); }
+        if (err) { 
+            return res.json({type:false,data: 'error occured '+ err}); 
+        }
         if(user){
             return res.json(user);
         }
-        if(!user){ return res.json({'message':info['loginMessage']}) }
     })(req, res, next);
 }
 

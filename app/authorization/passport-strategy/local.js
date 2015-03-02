@@ -21,14 +21,22 @@ exports.signupStrategy = new LocalStrategy({
                     newUser.local.email    = email;
                     newUser.local.password = newUser.generateHash(password);
                     newUser.save(function(err,user) {
-                        if (err)
-                            throw err;
-                        var token = jwt.sign(user, 'hello-private', { algorithm: 'RS256'});
+                        if (err){
+                            return done(null,{
+                                type:false,
+                                data: 'error occured '+ err
+                            });
+                        }
+                        
+                        console.log("ROle of user signup : "+user.role);
+                        var token = jwt.sign({email: user.local.email, role : user.role, token: user.token}, 'helloprivate', { algorithm: 'RS256'});
                         user.token = token;
-                        console.log("###### token created : "+ token);
                         user.save(function(err,user1){
-                            console.log("#### Response after signup : "+JSON.stringify(newUser));
-                            return done(null, user1);
+                           // return done(null, user1);
+                            if(err){
+                                return done(null, { type : false,data: 'Error occured '+ err});
+                            }
+                            return done(null, {type : true,data: {email: user1.local.email, role : user1.role}, token : user1.token});
                         }); 
                     });   
                }
@@ -45,16 +53,17 @@ exports.loginStrategy = new LocalStrategy({
     function(req, email, password, done) {
         process.nextTick(function() {
             var mUser = new User();
-            User.findOne({ 'local.email' :  email}, function(err, user) {
-                if (err)
-                    return done(err);
+            User.findOne({'local.email': email}, function(err, user) {
+                if (err){
+                    return done(null,{type:false,data: 'error occured '+ err});
+                }
                 if (!user) {
-                     return done(null, false, {'loginMessage': "Username doesn't exists."});
+                     return done(null, {type: false, 'data': "Account already exists with the email provided."});
                 } 
                 if(!user.validPassword(password)){
-					return done(null, false, {'loginMessage': 'Password is wrong.'}); 
+                    return done(null, {type: false, 'data': 'Password is wrong.'}); 
 				}
-                return done(null, user);
+                return done(null, {type : true,data: {email: user.local.email, role : user.role} ,token : user.token});
             });    
         });
     }                                      

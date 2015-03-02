@@ -3,7 +3,8 @@ angular.module('app', [
                 'ui.router',
                 'authorization',
                 'authorization.services',
-		            'ngCookies'
+		        'ngCookies',
+                'bubbles'
                 ]
 );
 

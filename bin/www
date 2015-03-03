@@ -10,6 +10,7 @@ console.log('Express server listening on port ' + server.address().port);
 
 var io = require("socket.io").listen(server);
 
+
 var meetupNamespace = io.of('/meetup').on("connection",function(socket){
 console.log("Application connected");
 
@@ -35,12 +36,12 @@ meetupNamespace.emit('delete meetup',meetup);
 });
 
 
-
 var chatNamespace = io.of('/chat').on("connection",function(socket){
    
    socket.on('send',function(chatData){
         console.log("New message received :"+chatData);
-        chatNamespace.emit('message',chatData);
+       // chatNamespace.emit('chatmessage',chatData);
+        socket.broadcast.emit('chatmessage',chatData);
    });
 
 });

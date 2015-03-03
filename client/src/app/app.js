@@ -4,7 +4,8 @@ angular.module('app', [
                 'authorization',
                 'authorization.services',
 		        'ngCookies',
-                'meetups'
+                'meetups',
+                'chats'
                 ]
 );
 

@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+               CHAT
+            </div>
+            <div class="panel-body">
+                <ul class="media-list" ng-repeat="chat in chats">
+                    <li class="media">
+                        <div class="media-body">
+                            <div class="media">
+                                <a class="pull-left" href="#">
+                                    <img class="media-object img-circle " src="/assets/images/user.gif" />
+                                </a>
+                                <div class="media-body" >
+                                    {{chat.message}}
+                                    <br />
+                                    <small class="text-muted">Alex Deo | 23rd June at 5:00pm</small>
+                                    <hr />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-footer">
+                <form  class="form-horizontal chatForm"  name="chatForm">
+                    <div class="form-group form-group-lg">
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="message" class="form-control" placeholder="Enter Message" />
+                        </div>
+                        <div class="col-sm-2">
+                            <button  class="btn btn-info" type="submit" ng-click="send()">SEND</button>
+                        </div>     
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

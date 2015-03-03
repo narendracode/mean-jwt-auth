@@ -22,3 +22,10 @@
 .dividerLine{
 	background-color: black;
 }
+
+.chat-message-panel{
+    min-height: 800px;
+    max-height: 800px;
+    overflow-y: scroll;
+    padding-bottom: 80px;
+}

@@ -40,8 +40,16 @@ var chatNamespace = io.of('/chat').on("connection",function(socket){
    
    socket.on('send',function(chatData){
         console.log("New message received :"+chatData);
-       // chatNamespace.emit('chatmessage',chatData);
         socket.broadcast.emit('chatmessage',chatData);
    });
-
+   
+   socket.on('typing',function(chatData){
+        console.log("New message received :"+chatData);
+        socket.broadcast.emit('typing',chatData);
+   });
+   
+   socket.on('typing:stopped',function(chatData){
+        socket.broadcast.emit('typing:stopped',chatData);
+   });
+   
 });

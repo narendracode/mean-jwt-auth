@@ -4,7 +4,7 @@ angular.module('app', [
                 'authorization',
                 'authorization.services',
 		        'ngCookies',
-                'bubbles'
+                'meetups'
                 ]
 );
 

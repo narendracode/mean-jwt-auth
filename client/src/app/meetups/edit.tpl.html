@@ -1,0 +1,17 @@
+
+<div>
+    <a href="/#/meetup">Back</a>
+</div>
+
+<h3>Edit Meetup Details</h3>
+
+
+<form ng-submit="updateMeetup(meetup._id)">
+   <div class="form-group">
+       <label class="sr-only" for="meetupName">Meetup Name</label>
+        <input type="text" ng-model="meetup.name" placeholder="Meetup Name" id="meetupName" class="form-control">
+  </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+ 
+</form>
+

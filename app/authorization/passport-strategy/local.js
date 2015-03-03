@@ -9,6 +9,7 @@ exports.signupStrategy = new LocalStrategy({
     },
     function(req, email, password, done) {
         process.nextTick(function() {
+            var name = req.body.name;
 	    User.findOne({ 'local.email' :  email }, function(err, user) {
                 if (err){
 		              return done(err);
@@ -18,7 +19,8 @@ exports.signupStrategy = new LocalStrategy({
                 } else {
                     var newUser  = new User();
                     newUser.role =  'user';
-                    newUser.local.email    = email;
+                    newUser.local.email = email;
+                    newUser.local.name = name;
                     newUser.local.password = newUser.generateHash(password);
                     newUser.save(function(err,user) {
                         if (err){
@@ -27,13 +29,13 @@ exports.signupStrategy = new LocalStrategy({
                                 data: 'error occured '+ err
                             });
                         }
-                        var token = jwt.sign({email: user.local.email, role : user.role, token: user.token}, 'helloprivate', { algorithm: 'RS256'});
+                        var token = jwt.sign({email: user.local.email, role : user.role, name : user.local.name, token: user.token}, 'mean-demo-app-private-key', { algorithm: 'RS256'});
                         user.token = token;
                         user.save(function(err,user1){
                             if(err){
                                 return done(null, { type : false,data: 'Error occured '+ err});
                             }
-                            return done(null, {type : true,data: {email: user1.local.email, role : user1.role}, token : user1.token});
+                            return done(null, {type : true, data: {email: user1.local.email, role : user1.role, name: user1.local.name}, token : user1.token});
                         }); 
                     });   
                }
@@ -60,7 +62,7 @@ exports.loginStrategy = new LocalStrategy({
                 if(!user.validPassword(password)){
                     return done(null, {type: false, 'data': 'Password is wrong.'}); 
 				}
-                return done(null, {type : true,data: {email: user.local.email, role : user.role} ,token : user.token});
+                return done(null, {type : true, data: {email: user.local.email, role : user.role, name: user.local.name},token : user.token});
             });    
         });
     }                                      

@@ -1,0 +1,28 @@
+<h3>  Meetup Details </h3>
+<!--<h3>app name is {{appname}}</h3>-->
+<h4> {{meetup.name}}</h3>
+
+<form class="form-horizontal" role="form">   
+     <div class="form-group">
+         <label  class="col-sm-1 control-label">Venue</label>
+         <label  class="col-sm-2 control-label">{{meetup.venue}}</label>
+     </div>
+     <div class="form-group">
+         <label  class="col-sm-1 control-label">Date</label>
+         <!--<label  class="col-sm-2 control-label"> {{ meetup.date | amDateFormat:'do MMMM YYYY' }}</label>-->
+         <label  class="col-sm-2 control-label">{{ meetup.date}}</label>
+        
+     </div>
+     <div class="form-group">
+         <label  class="col-sm-1 control-label">Time</label>
+         <label  class="col-sm-2 control-label">{{meetup.fromTime}} - {{meetup.toTime}}</label>
+     </div>
+</form>
+
+<div>
+    <a href="/#/meetup/">Back</a>
+</div>
+
+
+
+

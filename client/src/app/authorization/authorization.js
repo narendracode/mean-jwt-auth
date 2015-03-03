@@ -25,21 +25,21 @@ angular.module('authorization').controller('AuthController',['$scope','$resource
         var AuthSignupResource = $resource('/auth/signup');   
         var AuthLoginResource = $resource('/auth/login'); 
 
-  $scope.loginOauth = function(provider) {
-    $window.location.href = '/auth/' + provider;
-  };
+        $scope.loginOauth = function(provider) {
+            $window.location.href = '/auth/' + provider;
+        };
 
         $scope.errorExists = false;
            $scope.signup = function(){
                 $scope.$broadcast('show-errors-check-validity'); 
                 if ($scope.singupForm.$valid){
-                  AuthService.signup({email:$scope.email,password:$scope.password},function(result){
+                  AuthService.signup({email: $scope.email,password: $scope.password, name: $scope.name},function(result){
                     if(!result['type']){
                             $scope.errorExists = true;
                             $scope.loginErrorMessage = result['data'];
-                        }else{
+                    }else{
                             $location.path('/') 
-                        }
+                    }
                 });
               }   
           }//signup
@@ -58,12 +58,12 @@ angular.module('authorization').controller('AuthController',['$scope','$resource
             }
         }//login
 
-  $scope.logout = function(){
-    AuthService.logout(function(result){
-      if(result['status'] == 200){
-        $location.path('/login/');
-      } 
-    });
-  }
+        $scope.logout = function(){
+            AuthService.logout(function(result){
+                if(result['status'] == 200){
+                    $location.path('/login/');
+                } 
+            });
+        }
     }
 ]);

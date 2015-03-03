@@ -1,0 +1,41 @@
+<a href="/#/meetup/create/" class="btn btn-info">Create New Meetup</a> 
+<h1>
+    There are {{meetups.length}}  meetups.
+</h1>   
+   <table class="table table-striped" ng-show="meetups.length">
+       <tr>
+           <td>Meetup Name</td>
+           <td>Edit</td>
+           <td>Delete</td>
+       </tr>
+       <tr ng-repeat="meetup in meetups">
+            <td>
+            <a href="/#/meetup/{{meetup._id}}/" ng-click="findMeetup(meetup._id)">                         {{meetup.name}} </a>
+            </td>
+            <td> 
+              <a class="btn btn-inverse"   href="/#/meetup/{{meetup._id}}/edit/" ng-click="findMeetup(meetup._id)">
+               Edit
+               </a>
+                            <!--   <button  class="btn btn-inverse" ng-click="findMeetup(meetup._id)">
+                     Edit
+                  </button> -->
+               
+            </td>
+             <td> 
+                 <button  class="btn btn-danger" ng-click="deleteMeetup(meetup._id)">
+                     Delete
+                  </button>
+             </td>
+       </tr>
+   </table>
+   
+<!--
+<form ng-submit="createMeetup()">   
+    <div class="form-group">
+      <label class="sr-only" for="meetupName">Meetup Name</label>
+    <input type="text" ng-model="meetupName" class="form-control"  placeholder="Meetup Name" id="meetupName">  
+    </div> 
+     <button type="submit" class="btn btn-primary">Sign in</button>
+</form>
+-->
+         

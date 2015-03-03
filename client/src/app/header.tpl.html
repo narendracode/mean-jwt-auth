@@ -12,10 +12,11 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li ng-show="currentUser"><a href="/#/bubble/">Bubbles</a></li>
+        <li ng-show="currentUser"><a href="/#/meetup/">Meetups</a></li>
         <li ng-hide="currentUser"><a href="/#/login/">Login</a></li>
         <li ng-hide="currentUser"><a href="/#/signup/">Signup</a></li>
         <li ng-show="currentUser"><a ng-click="logout()">Logout</a></li>
+          <li ng-show="currentUser"><a href="#">{{currentUser.name}}</a></li>
       </ul>
     </div>
   </div>

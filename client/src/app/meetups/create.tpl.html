@@ -1,0 +1,45 @@
+
+<h4>Create New Meetup</h4>
+<form  class="form-horizontal meetupCreateForm"  name="meetupCreateForm">
+   <!-- ng-submit="createMeetup()" -->
+    <div class="form-group"  show-errors>
+        <label for="meetupName">Meetup Name</label>
+        <input type="text" ng-model="meetupName" name="meetupName" class="form-control" id="meetupName" required minlength ="5" maxlength="90"
+         placeholder="Enter Meetup Name">
+         <p class="help-block" ng-if="meetupCreateForm.meetupName.$error.minlength">
+             Meetup name is too short, name should atleast be 5 characters long
+         </p>
+    </div>
+    <div class="form-group" show-errors>
+        <label for="meetupDate">Date</label>
+        <input type="text" ng-model="meetupDate"  name="meetupDate" id="meetupDate" class="form-control" 
+         placeholder="Enter Meetup Date" required >
+    </div>
+    <div class="row">
+           <div class="col-md-5">
+                <div class="form-group" show-errors>
+                    <label for="meetupFrom ">From</label>
+                    <input type="text" ng-model="meetupFromTime" class="form-control meetup-time"                                         id="meetupFromTime" placeholder="Time" name="meetupFromTime" required >
+               </div>
+           </div>
+        <div class="col-md-5">
+            <div class="form-group" show-errors>
+                <label for="meetupTo">To</label>
+                <input type="text" ng-model="meetupToTime" class="form-control meetup-time" id="meetupToTime"                         name="meetupToTime" placeholder="Time"  required>
+            </div> 
+        </div>
+    </div>
+    <div class="form-group" show-errors>
+        <label for="meetupVenue">Meetup Venue</label>
+        <textarea class="form-control" ng-model="meetupVenue"  name="meetupVenue" id="meetupVenue"  rows="3"                     placeholder="Enter Meetup Address" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-info" ng-click="createMeetup()" >Add</button>
+    <a href="/#/meetup/create/" ng-click="reset()">Reset</a>
+</form>
+
+
+   <script>
+  $(function() {
+    $("#meetupDate").datepicker({minDate : "0d"});
+  });
+  </script>  

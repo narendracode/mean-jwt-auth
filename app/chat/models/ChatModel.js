@@ -9,7 +9,7 @@ var chatSchema = mongoose.Schema({
         sent_at : { type: Date, default: Date.now }
     }],
     created_at: { type: Date, default: Date.now },
-    created_by : String,
+    created_by : {type: String, default: null},
     is_active: { type: Boolean, default: true },
 });
 

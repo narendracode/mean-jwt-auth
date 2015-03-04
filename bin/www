@@ -37,6 +37,12 @@ meetupNamespace.emit('delete meetup',meetup);
 
 
 var chatNamespace = io.of('/chat').on("connection",function(socket){
+
+    console.log("###### application connected with socketId : "+socket.id);
+   
+   socket.on('disconnect',function(){
+   console.log("Application Disconnected with socket id : "+socket.id);
+   });
    
    socket.on('send',function(chatData){
         console.log("New message received :"+chatData);

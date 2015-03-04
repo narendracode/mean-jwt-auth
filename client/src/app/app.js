@@ -23,6 +23,25 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function (
 
 angular.module('app').controller('AppCtrl', ['$scope','$cookieStore','$location','AuthService','$rootScope', function($scope,$cookieStore,$location,AuthService,$rootScope) {
 
+    
+   /* $scope.$on('$locationChangeStart', function( event ) {
+        var answer = confirm("Are you sure you want to leave this page?")
+        if (!answer) {
+            event.preventDefault();
+        }
+    });
+    
+    $scope.$on('$destroy', function() {
+        //delete window.onbeforeunload;
+        var answer = confirm("Are you sure you want to leave this page?")
+        if (!answer) {
+            event.preventDefault();
+        }
+    });
+    */
+    
+    window.onunload = function(){ alert(" you are about to close the browser window."); }
+    
    var accessLevels = {
         'user': ['user'],
          'admin': ['admin','user']

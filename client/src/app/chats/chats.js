@@ -19,22 +19,25 @@ angular.module('chats').factory('chatsocket',function(){
 
 angular.module('chats').controller('ChatsController',['$scope','$resource','$state','$location','chatsocket','$rootScope',
             function($scope,$resource,$state,$location,chatsocket,$rootScope){
-               
                 var ChatResource = $resource('/chat/');
                 var objDiv = document.getElementById("chat-message-panel");
-
+                var chatResource = new ChatResource();
                 $scope.chats = [];
                 $scope.send = function(){
-                    $scope.chats.push({message: $scope.message, create_by: $rootScope.currentUser.name});
                     chatsocket.emit('typing:stopped',{message: $rootScope.currentUser.name + " stopped typing.."});
-                    chatsocket.emit('send',{message: $scope.message, create_by:$rootScope.currentUser.name});
+                   
+                    chatResource.message = $scope.message;
+                    chatResource.create_by = $scope.$rootScope.currentUser.name;
+                    chatResource.$save(function(result){
+                        $scope.chats.push({message: $scope.message, create_by: $rootScope.currentUser.name});
+                        chatsocket.emit('send',{message: $scope.message, create_by:$rootScope.currentUser.name});
+                        objDiv.scrollTop = objDiv.scrollHeight;
+                        $scope.message = "";
+                    });
                     
-                    objDiv.scrollTop = objDiv.scrollHeight;
-                    $scope.message = "";
                 }    
                 
                 chatsocket.on('chatmessage',function(data){
-                    console.log("##### message emit received: "+JSON.stringify(data));
                     if(data.message){
                             $scope.chats.push(data);
                         objDiv.scrollTop = objDiv.scrollHeight;
@@ -42,10 +45,12 @@ angular.module('chats').controller('ChatsController',['$scope','$resource','$sta
                     $scope.$apply();
                 });
                 
-                
                 $scope.emitTypingEvent = function(){
-                    console.log('emit typing.....');
-                    chatsocket.emit('typing',{message: $rootScope.currentUser.name + " is typing.."});
+                    if($scope.message){
+                        chatsocket.emit('typing',{message: $rootScope.currentUser.name + " is typing.."});
+                    }else{
+                        chatsocket.emit('typing:stopped',{message: $rootScope.currentUser.name + " stopped typing.."});
+                    }
                 }
                 
                 chatsocket.on('typing',function(data){

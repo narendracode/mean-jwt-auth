@@ -7,10 +7,33 @@ angular.module('chats').config(['$stateProvider','$urlRouterProvider',
                         .state('chat',{
                                   url: "/chat/",
                                   templateUrl: 'app/chats/chat.tpl.html',
-                                  controller: 'ChatsController'
+                                  controller: 'ChatsController',
+                                  data: {
+                                        authRequired: true,
+                                        access: ['user']
+                                  }
                         });                               
               }
 ]);
+
+angular.module('chats').run(function($rootScope,$location){
+    return $rootScope.$on("$stateChangeStart", function(event, next) {
+        if(next){
+            if(next.data){
+                if(next.data.authRequired){
+                    if($rootScope.currentUser){
+                        //do nothing 
+                    }else{
+                        $location.path('/login/');
+                    }
+                }
+            }
+        }else{
+           console.log("found nothing for authentication..."); 
+        }
+    });
+});
+
 
 angular.module('chats').factory('chatsocket',function(){
     var socket = io.connect("http://192.168.1.106:3000/chat");

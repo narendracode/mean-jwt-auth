@@ -1,7 +1,7 @@
 angular.module('app', [
                 'ngResource',
                 'ui.router',
-                'authorization',
+               'authorization',
                 'authorization.services',
 		        'ngCookies',
                 'meetups',
@@ -20,27 +20,14 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function (
 
 }]);
 
+angular.module('app').factory('chatsocket',function(){
+    var socket = io.connect("http://192.168.1.3:3000/chat");
+    return socket;
+});
 
-angular.module('app').controller('AppCtrl', ['$scope','$cookieStore','$location','AuthService','$rootScope', function($scope,$cookieStore,$location,AuthService,$rootScope) {
 
-    
-   /* $scope.$on('$locationChangeStart', function( event ) {
-        var answer = confirm("Are you sure you want to leave this page?")
-        if (!answer) {
-            event.preventDefault();
-        }
-    });
-    
-    $scope.$on('$destroy', function() {
-        //delete window.onbeforeunload;
-        var answer = confirm("Are you sure you want to leave this page?")
-        if (!answer) {
-            event.preventDefault();
-        }
-    });
-    */
-    
-    window.onunload = function(){ alert(" you are about to close the browser window."); }
+angular.module('app').controller('AppCtrl', ['$scope','$cookieStore','$location','AuthService','$rootScope','chatsocket', function($scope,$cookieStore,$location,AuthService,$rootScope,chatsocket) {
+
     
    var accessLevels = {
         'user': ['user'],
@@ -48,8 +35,6 @@ angular.module('app').controller('AppCtrl', ['$scope','$cookieStore','$location'
    };
 
    $rootScope.hasAccess = function(level){
-    //  console.log('##### has access is called.. '+level);
-
        if($rootScope.currentUser && accessLevels[$rootScope.currentUser['role']]){
           if(accessLevels[$rootScope.currentUser['role']].indexOf(level) > -1)
             return true;
@@ -57,7 +42,6 @@ angular.module('app').controller('AppCtrl', ['$scope','$cookieStore','$location'
            return false;
       }else
        return false;
-   
    }
    
    AuthService.currentUser(function(result){
@@ -67,11 +51,13 @@ angular.module('app').controller('AppCtrl', ['$scope','$cookieStore','$location'
 				$rootScope.currentUser = null;               
 			}
 		}
+       if(result.type){
+           chatsocket.emit('user:login',{email: $rootScope.currentUser.email});
+       }
 	});
 	$rootScope.currentUser = $cookieStore.get('user');
 
 	$scope.logout = function(){
-		
 		AuthService.logout(function(result){
 			console.log("Response after logout: "+JSON.stringify(result));
 			//if(result['status']==200){

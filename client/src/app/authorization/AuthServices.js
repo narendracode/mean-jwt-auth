@@ -84,13 +84,14 @@ module.factory('AuthService',function($resource,$rootScope,$location,$cookieStor
      	 if (typeof token !== 'undefined') {
              var encoded = token.split('.')[1];
              userData = JSON.parse(urlBase64Decode(encoded));
+             userData.type = true;
              if(userData){
                 $cookieStore.put('user',userData);
 				$rootScope.currentUser = userData;
              }
              callback(userData);
          }else
-           callback({message:"nothing found "});
+           callback({type: false, message:"no user found"});
     }
   
      /*,

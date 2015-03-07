@@ -36,9 +36,9 @@ exports.logout = function(req, res) {
   if(req.user) {
      req.session.destroy();
     req.logout();
-    res.json({'status':200,'message':'User successfully logged out.','role':'none'});
+    res.json({'status':200,'message':'User successfully logged out.','role':'none',type:false});
   } else {
-    res.json({'status':404,'message':'No user found.','role':'none'});
+      res.json({'status':200,'message':'User successfully logged out','role':'none', type: false});
   }
 };
 

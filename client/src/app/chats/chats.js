@@ -10,7 +10,7 @@ angular.module('chats').config(['$stateProvider','$urlRouterProvider',
                                   controller: 'ChatsController',
                                   data: {
                                         authRequired: true,
-                                        access: ['user']
+                                        access: ['user','admin']
                                   }
                         });                               
               }
@@ -36,13 +36,13 @@ angular.module('chats').run(function($rootScope,$location){
 
 
 angular.module('chats').factory('chatsocket',function(){
-    var socket = io.connect("http://192.168.1.106:3000/chat");
+    var socket = io.connect("http://192.168.1.3:3000/chat");
     return socket;
 });
 
 angular.module('chats').controller('ChatsController',['$scope','$resource','$state','$location','chatsocket','$rootScope',
             function($scope,$resource,$state,$location,chatsocket,$rootScope){
-                var ChatResource = $resource('/chat/');
+                var ChatResource = $resource('/chat');
                 var objDiv = document.getElementById("chat-message-panel");
                 var chatResource = new ChatResource();
                 $scope.chats = [];
@@ -50,14 +50,14 @@ angular.module('chats').controller('ChatsController',['$scope','$resource','$sta
                     chatsocket.emit('typing:stopped',{message: $rootScope.currentUser.name + " stopped typing.."});
                    
                     chatResource.message = $scope.message;
-                    chatResource.create_by = $scope.$rootScope.currentUser.name;
+                    chatResource.create_by = $rootScope.currentUser.name;
                     chatResource.$save(function(result){
+                        console.log("###### response from chat res : "+JSON.stringify(result));
                         $scope.chats.push({message: $scope.message, create_by: $rootScope.currentUser.name});
                         chatsocket.emit('send',{message: $scope.message, create_by:$rootScope.currentUser.name});
                         objDiv.scrollTop = objDiv.scrollHeight;
                         $scope.message = "";
                     });
-                    
                 }    
                 
                 chatsocket.on('chatmessage',function(data){

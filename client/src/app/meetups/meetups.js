@@ -8,47 +8,69 @@ function($stateProvider,$urlRouterProvider){
     .state('meetup', {
       url: "/meetup/",
       templateUrl: 'app/meetups/list.tpl.html',
-      controller: 'MeetupsController'
+      controller: 'MeetupsController',
+      data: {
+            authRequired: true,
+            access: ['user','admin']
+      }
     })
     .state('meetupcreate',{
       url: "/meetup/create/",
       templateUrl : 'app/meetups/create.tpl.html',
-      controller: 'MeetupsController'
+      controller: 'MeetupsController',
+      data: {
+            authRequired: true,
+            access: ['user','admin']
+      }
     })
     .state('meetupview', {
       url: "/meetup/:id/",
       templateUrl : 'app/meetups/details.tpl.html',
-      controller: 'MeetupsController'
+      controller: 'MeetupsController',
+      data: {
+            authRequired: true,
+            access: ['user','admin']
+      }
     })
      .state('meetupedit', {
       url: "/meetup/:id/edit/",
       templateUrl: 'app/meetups/edit.tpl.html',
-      controller: 'MeetupsController'
+      controller: 'MeetupsController',
+      data: {
+            authRequired: true,
+            access: ['user','admin']
+      }
     });                               
 }
 ]);
 
 
-/*
-angular.module('meetups').run(function($rootScope,$location,IsAuthenticatedService) {
-    $rootScope.$on('$stateChangeStart', function() {
-        if(!(!!IsAuthenticatedService.isLoggedIn)){
-            console.log('user not logged in');
-             $location.path("/login/")
+angular.module('meetups').run(function($rootScope,$location){
+    return $rootScope.$on("$stateChangeStart", function(event, next) {
+        if(next){
+            if(next.data){
+                if(next.data.authRequired){
+                    if($rootScope.currentUser){
+                        //do nothing 
+                    }else{
+                        $location.path('/login/');
+                    }
+                }
+            }
+        }else{
+            console.log("found nothing for authentication..."); 
         }
-            
     });
 });
-*/
+
 
 angular.module('meetups').factory('socket',function(){
-    var socket = io.connect("http://192.168.1.106:3000/meetup");
+    var socket = io.connect("http://192.168.1.3:3000/meetup");
     return socket;
 });
 
 
-angular.module('meetups').controller('MeetupsController',['$scope','$resource','$state','$location','MeetupUpdateService','socket',
-                                                          function($scope,$resource,$state,$location,MeetupUpdateService,socket){
+angular.module('meetups').controller('MeetupsController',['$scope','$resource','$state','$location','MeetupUpdateService','socket',                                                   function($scope,$resource,$state,$location,MeetupUpdateService,socket){
     var MeetupResource = $resource('/meetup/:id'); //this will be the base URL for our rest express route.
             $scope.appname = "Mean Demo";
             $scope.meetupUpdateService = new MeetupUpdateService();

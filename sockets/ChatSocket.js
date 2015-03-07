@@ -20,5 +20,14 @@ module.exports = function(io){
         socket.on('typing:stopped',function(chatData){
             socket.broadcast.emit('typing:stopped',chatData);
         });
+        
+        
+        socket.on('user:login',function(chatData){
+            console.log("###### user logged in with email : "+ chatData.email);
+        });
+        
+        socket.on('user:logout',function(chatData){
+            console.log("###### user logout with email : "+ chatData.email);
+        });
     });
 }

@@ -19,9 +19,14 @@ function($stateProvider,$urlRouterProvider){
 }
 ]);
 
+angular.module('chats').factory('chatsocket',function(){
+    var socket = io.connect("http://192.168.1.3:3000/chat");
+    return socket;
+});
 
-angular.module('authorization').controller('AuthController',['$scope','$resource','$state','$location','AuthService','$window','$rootScope',
-    function($scope,$resource,$state,$location,AuthService,$window,$rootScope){
+
+angular.module('authorization').controller('AuthController',['$scope','$resource','$state','$location','AuthService','$window','$rootScope','chatsocket',
+        function($scope,$resource,$state,$location,AuthService,$window,$rootScope,chatsocket){
         var AuthSignupResource = $resource('/auth/signup');   
         var AuthLoginResource = $resource('/auth/login'); 
 
@@ -38,6 +43,7 @@ angular.module('authorization').controller('AuthController',['$scope','$resource
                             $scope.errorExists = true;
                             $scope.loginErrorMessage = result['data'];
                     }else{
+                            chatsocket.emit('user:login',{email: $rootScope.currentUser.email});
                             $location.path('/') 
                     }
                 });
@@ -52,6 +58,7 @@ angular.module('authorization').controller('AuthController',['$scope','$resource
                          $scope.errorExists = true;
                          $scope.loginErrorMessage = result['data'];
                     }else{
+                        chatsocket.emit('user:login',{email: $rootScope.currentUser.email});
                         $location.path("/meetup/") 
                     }
                  });
@@ -59,6 +66,7 @@ angular.module('authorization').controller('AuthController',['$scope','$resource
         }//login
 
         $scope.logout = function(){
+            chatsocket.emit('user:logout',{email: $rootScope.currentUser.email});
             AuthService.logout(function(result){
                 if(result['status'] == 200){
                     $location.path('/login/');
